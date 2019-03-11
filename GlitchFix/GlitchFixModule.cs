@@ -171,6 +171,17 @@ namespace GlitchFix
             {
                 if (Entity != null)
                 {
+                    if (Entity.Name == "WoodFoundation")
+                    {
+                        foreach (var x in Physics.OverlapSphere(Entity.Location, 4.5f))
+                        {
+                            if (x.name == "SleepingBagA(Clone)")
+                            {
+                                Entity.Destroy();
+                                actualplacer.MessageFrom("AntiGlitch", "[color red]You can`t Glitch SleepBag into Fuoundation");
+                            }
+                        }
+                    }
                     if (Entity.Name.Contains("Foundation") || Entity.Name.Contains("Ramp")
                         || Entity.Name.Contains("Pillar") || Entity.Name == "WoodDoor" || Entity.Name == "MetalDoor")
                     {
