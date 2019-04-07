@@ -93,6 +93,7 @@ namespace Fougerite
 
         public void BanPlayerIPandID(string ip, string id, string name = "1", string reason = "You were banned.", string adminname = "Unknown")
         {
+            Fougerite.Player pl = FindPlayer(id);
             bool cancel = Hooks.OnBanEventHandler(new BanEvent(ip, id, name, reason, adminname));
             if (cancel) { return; }
             File.AppendAllText(Path.Combine(Util.GetRootFolder(), "Save\\BanLog.log"), "[" + DateTime.Now.ToShortDateString() + " "
@@ -101,6 +102,7 @@ namespace Fougerite
                 + " " + DateTime.Now.ToString("HH:mm:ss") + "] " + name + "|" + id + "|" + adminname + "|" + reason + "\r\n");
             DataStore.GetInstance().Add("Ips", ip, name);
             DataStore.GetInstance().Add("Ids", id, name);
+            pl.Disconnect();
         }
 
         public void BanPlayerIP(string ip, string name = "1", string reason = "You were banned.", string adminname = "Unknown")
@@ -114,11 +116,13 @@ namespace Fougerite
 
         public void BanPlayerID(string id, string name = "1", string reason = "You were banned.", string adminname = "Unknown")
         {
+            Fougerite.Player pl = FindBySteamID(id);
             bool cancel = Hooks.OnBanEventHandler(new BanEvent(id, name, reason, adminname, true));
             if (cancel) { return; }
             File.AppendAllText(Path.Combine(Util.GetRootFolder(), "Save\\BanLog.log"), "[" + DateTime.Now.ToShortDateString()
                 + " " + DateTime.Now.ToString("HH:mm:ss") + "] " + name + "|" + id + "|" + adminname + "|" + reason + "\r\n");
             DataStore.GetInstance().Add("Ids", id, name);
+            pl.Disconnect();
         }
 
         public bool IsBannedID(string id)
